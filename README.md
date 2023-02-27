@@ -27,9 +27,8 @@ Operations:
 
 - etc.
 
-
-
 ## incomplete example;
+
 
 Document Format:
 ``json
@@ -47,4 +46,4 @@ Document Format:
 ``
 
 ### note
-Thinking is that it is probably useful to create a similar method for SSH, which will be initiated shortly.
+this method is intended to benefit from [DID:SSH](https://github.com/WebCivics/did-method-ssh).
