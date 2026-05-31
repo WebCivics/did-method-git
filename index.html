@@ -608,6 +608,35 @@ git-did = "did:git:" git-repo [ ":" commit-hash ]
 
 </section>
 
+<section>
+    <h2>
+        WebID and Solid Interoperability
+    </h2>
+    <p>
+        A WebID is a URI that points to a profile document identifying a person, agent, or group, often utilized in decentralized web ecosystems like the <a href="https://solidproject.org/">Solid Project</a>.
+        The <code>did:git</code> method is designed to natively operate as a valid WebID, seamlessly bridging W3C Decentralized Identifiers with WebID authentication paradigms (WebID-TLS and WebID-OIDC).
+    </p>
+
+    <section>
+        <h3>
+            did:git as a Native WebID
+        </h3>
+        <p>
+            When a relying party (e.g., a Solid Pod) attempts to dereference a WebID, it performs HTTP Content Negotiation. While legacy WebIDs resolve to Turtle (<code>.ttl</code>) files, a <code>did:git</code> URI natively satisfies WebID requirements by returning a JSON-LD DID Document when queried with an <code>Accept: application/ld+json</code> or <code>application/did+ld+json</code> header. The resolved DID Document inherently contains the cryptographic material necessary to act as a WebID Profile.
+        </p>
+    </section>
+
+    <section>
+        <h3>
+            Authentication (WebID-TLS)
+        </h3>
+        <p>
+            WebID-TLS authentication requires the client to present an X.509 client certificate, which the server validates against the public key found in the WebID profile. 
+            Because the <code>did:git</code> parser natively extracts X.509 S/MIME signatures from Git commits and maps them to <code>JsonWebKey2020</code> (or equivalent) in the <code>verificationMethod</code> array, a <code>did:git</code> DID Document inherently exposes the exact cryptographic assertions required for WebID-TLS authentication. A user simply signs their repository commits with their client certificate to establish their WebID identity root.
+        </p>
+    </section>
+</section>
+
 <section class="informative">
     <h2>
         Security considerations
