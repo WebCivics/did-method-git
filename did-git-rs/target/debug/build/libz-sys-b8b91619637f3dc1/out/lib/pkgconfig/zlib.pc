@@ -1,0 +1,14 @@
+prefix=C:\Users\Admin\Documents\GitHub\did-method-git\did-git-rs\target\debug\build\libz-sys-b8b91619637f3dc1\out
+exec_prefix=@exec_prefix@
+libdir=${prefix}/lib
+sharedlibdir=@sharedlibdir@
+includedir=${prefix}/include
+
+Name: zlib
+Description: zlib compression library
+Version: 1.3.2
+License: Zlib
+
+Requires:
+Libs: -L${libdir} -L${sharedlibdir} -lz
+Cflags: -I${includedir}

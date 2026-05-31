@@ -93,11 +93,13 @@
     </script>
 </head>
 <body>
+<div style="background: linear-gradient(90deg, #1f2833, #0b0c10); padding: 15px; text-align: center; border-bottom: 2px solid #66fcf1; margin-bottom: 20px;">
+    <a href="playground/index.html" style="color: #66fcf1; font-family: sans-serif; font-weight: bold; text-decoration: none; font-size: 1.1em;">✨ Try the Interactive Playground! Explore how Git history drives Decentralized Identifiers. ✨</a>
+</div>
 <section id="abstract">
     <p>
-        Many early DID methods were based on distributed ledgers or other decentralized infrastructure, and some of
-        those still remain popular. However, it was not obvious that there was a DID for GIT, so i made one.
-        The DID method presented here is <code>did:git</code>.
+        Many early DID methods were based on distributed ledgers or other decentralized infrastructure. The DID method presented here is <code>did:git</code>.
+        The primary intention of the <code>did:git</code> method is to support <strong>permissive commons</strong> by embedding licensing, rights, and financial obligations directly into the version control workflow, anchored via <code>gitmark</code> to the Bitcoin blockchain. This strips "digital slavery" out of the commons informatics supply chain.
     </p>
 </section>
 <section id="sotd">
@@ -112,7 +114,7 @@
         </h2>
         <p>
             The <code>did:git</code> method specification conforms to the requirements specified in the
-            Decentralized Identifiers v1.0 Specification [[DID-CORE]]. For more
+            Decentralized Identifiers v1.1 Specification [[DID-CORE]]. For more
             information about DIDs and DID method specifications, please also see the
             [[?DID-PRIMER]].
         </p>
@@ -207,8 +209,11 @@ did:git:git@github.com:WebCivics/did-method-git.git
         </p>
         
         <pre class="nohighlight">
-git-did = "did:git:" git
+git-did = "did:git:" git-repo [ ":" commit-hash ]
         </pre>
+        <p>
+            The <code>git-repo</code> component can be a standard git URL, and the optional <code>commit-hash</code> anchors the resolution to a specific moment in the repository's history.
+        </p>
     </section>
 
     <section>
@@ -542,11 +547,62 @@ git-did = "did:git:" git
 
     <section>
         <h3>
-            Relation to SSH
+            Access Control and Payload Encryption
         </h3>
         <p>
-        This specification needs to be used in conjunction with SSH in cases where SSH is used 
-        to authenticate the user and to provide access to the git repository. A seperate Specification will be defined for the DID:SSH specification.
+        In addition to public permissive commons, <code>did:git</code> natively supports <strong>Private Shared Resources</strong> (e.g., private relationship logs or sensitive shared data) by leveraging the cryptographic keys embedded in the W3C DID Documents.
+        </p>
+        <p>
+        <strong>Network Access Control:</strong> The SSH keys defined in the <code>verificationMethod</code> of authorized <code>did:git</code> identified entities can be mapped to Git transport hooks (e.g., Gitolite or native SSH constraints), thereby cryptographically restricting which users can <code>fetch</code> or <code>push</code> to the repository.
+        </p>
+        <p>
+        <strong>Payload Encryption:</strong> To guarantee data privacy even on untrusted hosts, <code>did:git</code> supports transparent file encryption (conceptually identical to <code>git-crypt</code>). The PGP public keys associated with authorized <code>did:git</code> identified users are used to encrypt the repository's files. Thus, the files remain encrypted at rest and in transit, and can only be decrypted locally by the authorized participants holding the corresponding private keys.
+        </p>
+        <p>
+        A separate specification will further define the native DID to SSH bindings (DID:SSH) for transport layer security.
+        </p>
+    </section>
+
+    <section>
+        <h3>
+            Network-Level Privacy and Nym Integration
+        </h3>
+        <p>
+        To prevent metadata leakage (such as IP addresses and connection timing) that occurs even when payloads are encrypted, <code>did:git</code> natively supports the <strong>Nym Mixnet</strong>.
+        </p>
+        <p>
+        A Decentralized Identifier Document can express a Nym network address as a <code>ServiceEndpoint</code>. Git clients <em class="rfc2119">SHOULD</em> route <code>fetch</code> and <code>push</code> operations through a Nym SOCKS5 proxy (e.g., <code>nym-socks5-client</code>) when resolving repositories hosted via Nym Network Requesters. This ensures true anonymity for both the repository host and the identified users communicating with it.
+        </p>
+    </section>
+
+    <section>
+        <h3>
+            Cryptographic Suite Mappings
+        </h3>
+        <p>
+        Git natively supports several signature standards. The <code>did:git</code> method parses these raw commit signatures and maps them to standard W3C <code>verificationMethod</code> cryptographic suites. 
+        </p>
+        <p>
+        The required mappings are as follows:
+        </p>
+        <ul>
+            <li><strong>SSH Ed25519</strong> (<code>-----BEGIN SSH SIGNATURE-----</code> with <code>ssh-ed25519</code> payload): Maps to <code>Ed25519VerificationKey2020</code>.</li>
+            <li><strong>SSH ECDSA</strong> (<code>-----BEGIN SSH SIGNATURE-----</code> with <code>ecdsa-sha2-nistp256</code> payload): Maps to <code>EcdsaSecp256k1VerificationKey2019</code>.</li>
+            <li><strong>SSH RSA</strong> (<code>-----BEGIN SSH SIGNATURE-----</code> with <code>ssh-rsa</code> payload): Maps to <code>RsaVerificationKey2018</code>.</li>
+            <li><strong>PGP/GPG</strong> (<code>-----BEGIN PGP SIGNATURE-----</code>): Maps to <code>PgpVerificationKey2021</code>.</li>
+            <li><strong>X.509 S/MIME</strong> (<code>-----BEGIN SIGNED MESSAGE-----</code>): Maps to <code>JsonWebKey2020</code> (or equivalent X.509 standards).</li>
+        </ul>
+    </section>
+
+    <section>
+        <h3>
+            Relation to gitmark and Bitcoin Anchoring
+        </h3>
+        <p>
+        The base <code>did:git</code> method provides identity and verifiable history purely through the Git protocol. However, to support the <strong>Permissive Commons Profile</strong>, the use of <code>gitmark</code> is <strong>REQUIRED</strong>. 
+        </p>
+        <p>
+        Gitmark anchors git commits to the Bitcoin blockchain using blocktrails key chaining. This enables the evaluation of permissive commons obligations and the tracking of financial contributions in a tamper-proof manner without requiring a centralized registry. For basic <code>did:git</code> resolution where obligation tracking is not needed, <code>gitmark</code> is optional.
         </p>
     </section>
 

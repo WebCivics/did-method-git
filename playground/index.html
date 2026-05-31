@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>did:git | Interactive Playground</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="bg-fx"></div>
+    
+    <header class="glass-header">
+        <div class="logo">
+            <h1>did:git <span>Playground</span></h1>
+            <p>Cryptographic Identity Traversal Simulator</p>
+        </div>
+        <nav>
+            <a href="../index.html" class="nav-link">← Back to Specification</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        <!-- Sidebar Timeline -->
+        <section class="timeline-panel glass-panel">
+            <h2>Commit History (DAG)</h2>
+            <div class="timeline" id="timeline-container">
+                <!-- Injected via JS -->
+            </div>
+        </section>
+
+        <!-- Main DID View -->
+        <section class="did-panel glass-panel">
+            <div class="panel-header">
+                <h2>Resolved DID Document</h2>
+                <div class="badge" id="state-badge">State: Genesis</div>
+            </div>
+            
+            <div class="explanation" id="explanation-box">
+                <!-- Explanation injected via JS -->
+            </div>
+
+            <div class="code-container">
+                <div class="code-header">
+                    <span id="did-url">did:git:repo</span>
+                </div>
+                <pre><code id="did-json"></code></pre>
+            </div>
+        </section>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>

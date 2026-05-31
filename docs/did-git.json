@@ -1,0 +1,9 @@
+{
+  "name": "git",
+  "status": "proposed",
+  "verifiableDataRegistry": "Established via git",
+  "contactName": "Timothy Holborn",
+  "contactEmail": "info@webcivics.org",
+  "contactWebsite": "https://webcivics.org",
+  "specification": "https://webcivics.github.io/did-method-git"
+}
