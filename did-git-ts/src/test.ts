@@ -62,6 +62,20 @@ try {
     }
     console.log("✅ Cryptographic suite mappings verified.");
 
+    // ---------------------------------------------------------
+    // Test 4: Turtle (.ttl) Serialization
+    // ---------------------------------------------------------
+    console.log("\nRunning Test 4: Turtle (.ttl) Serialization...");
+    const { TurtleSerializer } = require('./turtle');
+    const turtleStr = TurtleSerializer.serialize(didDoc);
+    
+    assert.ok(turtleStr.includes('@prefix cert:'), "Turtle output must contain cert: prefix.");
+    assert.ok(turtleStr.includes('a foaf:Agent ;'), "Turtle output must define a foaf:Agent.");
+    assert.ok(turtleStr.includes(`cert:key <${mockDid}#keys-1>`), "Turtle output must link to the verification key.");
+    
+    console.log("✅ Turtle serialization verified.");
+    console.log(`\n📄 Generated Turtle Preview:\n${turtleStr}`);
+
     console.log("\n🎉 All tests passed successfully!");
     process.exit(0);
 

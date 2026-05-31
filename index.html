@@ -622,7 +622,10 @@ git-did = "did:git:" git-repo [ ":" commit-hash ]
             did:git as a Native WebID
         </h3>
         <p>
-            When a relying party (e.g., a Solid Pod) attempts to dereference a WebID, it performs HTTP Content Negotiation. While legacy WebIDs resolve to Turtle (<code>.ttl</code>) files, a <code>did:git</code> URI natively satisfies WebID requirements by returning a JSON-LD DID Document when queried with an <code>Accept: application/ld+json</code> or <code>application/did+ld+json</code> header. The resolved DID Document inherently contains the cryptographic material necessary to act as a WebID Profile.
+            When a relying party (e.g., a Solid Pod) attempts to dereference a WebID, it performs HTTP Content Negotiation. While modern applications should request JSON-LD, many legacy Semantic Web agents strictly expect WebID profiles to be served in Turtle (<code>.ttl</code>) format.
+        </p>
+        <p>
+            To ensure maximum backward compatibility across the WebID and Solid ecosystems, <code>did:git</code> resolvers <strong>SHOULD</strong> support dynamic Content Negotiation for <code>text/turtle</code>. When an agent requests <code>Accept: text/turtle</code>, the resolver must dynamically synthesize and return a valid RDF Turtle string from the underlying JSON-LD DID Document, explicitly mapping the cryptographic <code>verificationMethod</code> arrays to standard <code>cert:key</code> and <code>foaf:Agent</code> triples.
         </p>
     </section>
 
